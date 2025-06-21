@@ -1,13 +1,31 @@
 import app from './app';
 import config from './config/config';
 import { Pool } from 'pg';
+import Redis from 'ioredis';
 
+// Initialize PostgreSQL pool
 const pool = new Pool({
   user: config.database.user,
   host: config.database.host,
   database: config.database.database,
   password: config.database.password,
   port: config.database.port,
+});
+
+// Initialize Redis client
+const redisClient = new Redis({
+  host: config.redis.host,
+  port: config.redis.port,
+  password: config.redis.password,
+});
+
+// Handle Redis connection errors
+redisClient.on('error', (error) => {
+  console.error('Redis client error', error);
+});
+
+redisClient.on('connect', () => {
+  console.log('Connected to Redis');
 });
 
 app.listen(config.port, async () => {
@@ -32,5 +50,6 @@ app.listen(config.port, async () => {
   }
 });
 
-// Make the database pool accessible to controllers
+// Make the database pool and Redis client accessible to controllers
 app.locals.dbPool = pool;
+app.locals.redisClient = redisClient;

@@ -17,6 +17,7 @@ A small sample project to get started with a modern Node.js Express API.
 - Helmet security configuration
 - Postgres connectivity
 - Redis data caching
+- Process management via PM2
 - OpenTelemetry (coming soon!)
 
 ## Getting Started

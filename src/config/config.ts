@@ -17,6 +17,11 @@ interface Config {
     port?: number;
     password?: string;
   };
+  rateLimit: {
+    windowMs: number;
+    max: number;
+    message: string;
+  };
 }
 
 const config: Config = {
@@ -33,6 +38,11 @@ const config: Config = {
     host: process.env.REDIS_HOST || 'localhost',
     port: Number(process.env.REDIS_PORT) || 6379,
     password: process.env.REDIS_PASSWORD,
+  },
+  rateLimit: {
+    windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
+    max: Number(process.env.RATE_LIMIT_MAX) || 100, // Limit IP address to 100 requests
+    message: process.env.RATE_LIMIT_MESSAGE || 'Too many requests from this IP address, please try again later',
   },
 };
 

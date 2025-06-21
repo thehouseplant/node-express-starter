@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import { employees, Employee } from '../models/employee';
 
 // Create an employee
-export const createEmployee = (req: Request, res: Response, next: NextFunction) => {
+export const createEmployee = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, title } = req.body;
+    const { name, title } = await req.body;
     const newEmployee: Employee = { id: Date.now(), name, title };
     employees.push(newEmployee);
     res.status(201).json(newEmployee);
@@ -38,10 +38,10 @@ export const getEmployeeById = (req: Request, res: Response, next: NextFunction)
 };
 
 // Update an employee
-export const updateEmployee = (req: Request, res: Response, next: NextFunction) => {
+export const updateEmployee = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = parseInt(req.params.id, 10);
-    const { name, title } = req.body;
+    const { name, title } = await req.body;
     const employeeIndex = employees.findIndex((i) => i.id === id);
     if (employeeIndex === -1) {
       res.status(404).json({ message: 'Employee not found' });

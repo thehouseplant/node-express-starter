@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { employees, Employee } from '../models/employee';
 import { Pool } from 'pg';
 import Redis from 'ioredis';
+import logger from '../utils/logger';
 
 // Helper functions to get the local database pool and Redis client
 const getPool = (res: Response): Pool => res.app.locals.dbPool;
@@ -14,6 +15,9 @@ const CACHE_EXPIRATION_SECONDS = 3600; // Cache for 1 hour
 
 // Create an employee
 export const createEmployee = async (req: Request, res: Response, next: NextFunction) => {
+  // Get request ID from request object
+  const requestId = (req as any).requestId;
+
   try {
     const { name, title } = req.body;
     const pool = getPool(res);
@@ -29,15 +33,20 @@ export const createEmployee = async (req: Request, res: Response, next: NextFunc
     await redisClient.del(ALL_EMPLOYEES_CACHE_KEY);
     await redisClient.del(`${EMPLOYEE_CACHE_KEY_PREFIX}${newEmployee.id}`);
 
-    // Return final result
+    // Log and return final result
+    logger.info('Employee created successfully', { employeeId: newEmployee.id, requestId });
     res.status(201).json(newEmployee);
   } catch (error) {
+    logger.error('Error creating employee', { error: error.message, requestId, body: req.body });
     next(error);
   }
 };
 
 // Read all employees
 export const getEmployees = async (req: Request, res: Response, next: NextFunction) => {
+  // Get request ID from request object
+  const requestId = (req as any).requestId;
+
   try {
     const pool = getPool(res);
     const redisClient = getRedisClient(res);
@@ -45,6 +54,7 @@ export const getEmployees = async (req: Request, res: Response, next: NextFuncti
     // Try to get data from cache
     const cachedEmployees = await redisClient.get(ALL_EMPLOYEES_CACHE_KEY);
     if (cachedEmployees) {
+      logger.info('Serving all employees from cache', { requestId });
       return res.json(JSON.parse(cachedEmployees));
     }
 
@@ -59,15 +69,20 @@ export const getEmployees = async (req: Request, res: Response, next: NextFuncti
       JSON.stringify(employees)
     );
 
-    // Return final result
+    // Log and return final result
+    logger.info('Fetched all employees from database and added to cache', { count: employees.length, requestId });
     res.json(result.rows);
   } catch (error) {
+    logger.error('Error getting all employees', { error: error.message, requestId });
     next(error);
   }
 };
 
 // Read single employee
 export const getEmployeeById = async (req: Request, res: Response, next: NextFunction) => {
+  // Get request ID from request object
+  const requestId = (req as any).requestId;
+
   try {
     const id = parseInt(req.params.id, 10);
     const pool = getPool(res);
@@ -77,6 +92,7 @@ export const getEmployeeById = async (req: Request, res: Response, next: NextFun
     // Try to get data from cache
     const cachedEmployee = await redisClient.get(cacheKey);
     if (cachedEmployee) {
+      logger.info('Serving single employee from cache', { employeeId: id, requestId });
       return res.json(JSON.parse(cachedEmployee));
     }
 
@@ -85,6 +101,7 @@ export const getEmployeeById = async (req: Request, res: Response, next: NextFun
     const employee = result.rows[0];
 
     if (!employee) {
+      logger.warn('Employee not found', { employeeId: id, requestId });
       res.status(404).json({ message: 'Employee not found' });
       return;
     }
@@ -96,15 +113,20 @@ export const getEmployeeById = async (req: Request, res: Response, next: NextFun
       JSON.stringify(employee)
     );
 
-    // Return final result
+    // Log and return final result
+    logger.info('Fetched single employee from database and added to cache', { employeeId: id, requestId });
     res.json(employee);
   } catch (error) {
+    logger.error('Error getting employee by ID', { error: error.message, employeeId: req.params.id, requestId });
     next(error);
   }
 };
 
 // Update an employee
 export const updateEmployee = async (req: Request, res: Response, next: NextFunction) => {
+  // Get request ID from request object
+  const requestId = (req as any).requestId;
+
   try {
     const id = parseInt(req.params.id, 10);
     const { name, title } = req.body;
@@ -118,6 +140,7 @@ export const updateEmployee = async (req: Request, res: Response, next: NextFunc
     const updatedEmployee = result.rows[0];
 
     if (!updatedEmployee) {
+      logger.warn('Employee not found', { employeeId: id, requestId, body: req.body });
       res.status(404).json({ message: 'Employee not found' });
       return;
     }
@@ -126,15 +149,20 @@ export const updateEmployee = async (req: Request, res: Response, next: NextFunc
     await redisClient.del(ALL_EMPLOYEES_CACHE_KEY);
     await redisClient.del(`${EMPLOYEE_CACHE_KEY_PREFIX}${id}`);
 
-    // Return final result
+    // Log and return final result
+    logger.info('Employee updated successfully', { employeeId: id, requestId });
     res.json(updateEmployee);
   } catch (error) {
+    logger.error('Error updating employee', { error: error.message, employeeId: req.params.id, requestId, body: req.body });
     next(error);
   }
 };
 
 // Delete an employee
 export const deleteEmployee = async (req: Request, res: Response, next: NextFunction) => {
+  // Get request ID from request object
+  const requestId = (req as any).requestId;
+
   try {
     const id = parseInt(req.params.id, 10);
     const pool = getPool(res);
@@ -147,6 +175,7 @@ export const deleteEmployee = async (req: Request, res: Response, next: NextFunc
     const deletedEmployee = result.rows[0];
 
     if (!deletedEmployee) {
+      logger.warn('Employee not found', { employeeId: id, requestId });
       res.status(404).json({ message: 'Employee not found' });
       return;
     }
@@ -155,9 +184,11 @@ export const deleteEmployee = async (req: Request, res: Response, next: NextFunc
     await redisClient.del(ALL_EMPLOYEES_CACHE_KEY);
     await redisClient.del(`${EMPLOYEE_CACHE_KEY_PREFIX}${id}`);
 
-    // Return final result
+    // Log and return final result
+    logger.info('Employee deleted successfully', { employeeId: id, requestId });
     res.json(deletedEmployee);
   } catch (error) {
+    logger.error('Error deleting employee', { error: error.message, employeeId: req.params.id, requestId });
     next(error);
   }
 };

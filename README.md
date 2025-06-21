@@ -11,13 +11,14 @@ A small sample project to get started with a modern Node.js Express API.
 
 ## Features
 
-- Type safety via TypeScript
+- Strong type safety (TypeScript)
 - Async/await
-- Linting and code styling
-- Helmet security configuration
-- Postgres connectivity
-- Redis data caching
-- Process management via PM2
+- Linting and code styling (`eslint` and `prettier`)
+- Default ecurity configuration (`helmet`)
+- PostgreSQL support (`pg`)
+- Data caching (Redis and `ioredis`)
+- Process management (`pmw`)
+- Structured logging (`winston`)
 - OpenTelemetry (coming soon!)
 
 ## Getting Started

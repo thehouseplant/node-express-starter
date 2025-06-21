@@ -17,5 +17,9 @@
   "bugs": {
     "url": "https://github.com/thehouseplant/node-express-starter/issues"
   },
-  "homepage": "https://github.com/thehouseplant/node-express-starter#readme"
+  "homepage": "https://github.com/thehouseplant/node-express-starter#readme",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
+  }
 }

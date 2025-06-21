@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --production --silent && npm cache clean --force
 
 # Copy source code
 COPY . .
@@ -16,8 +16,11 @@ COPY . .
 # Build the project with tsc
 RUN npm run build
 
+# Copy PM2 configuration file
+COPY ecosystem.config.js ./
+
 # Expose the server port
 EXPOSE 3000
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["pm2-runtime", "ecosystem.config.js"]

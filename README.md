@@ -9,6 +9,14 @@ A small sample project to get started with a modern Node.js Express API.
 - [Redis](https://redis.io/)
 - [Docker](https://www.docker.com/)
 
+## Features
+
+- Type safety via TypeScript
+- Linting and code styling built-in
+- Helmet configuration for security
+- Postgres database connectivity
+- Redis data caching
+
 ## Getting Started
 
 ```zsh

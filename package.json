@@ -1,7 +1,7 @@
 {
   "name": "express-starter",
   "version": "1.0.0",
-  "description": "",
+  "description": "A sample project to get started with a modern Node.js Express API",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
@@ -19,9 +19,15 @@
     "type": "git",
     "url": "git+https://github.com/thehouseplant/node-express-starter.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "node",
+    "nodejs",
+    "express",
+    "expressks",
+    "typescript"
+  ],
+  "author": "Sean Collins <sean.collins@outlook.com>",
+  "license": "MIT",
   "type": "commonjs",
   "bugs": {
     "url": "https://github.com/thehouseplant/node-express-starter/issues"

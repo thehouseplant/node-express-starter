@@ -12,11 +12,12 @@ A small sample project to get started with a modern Node.js Express API.
 ## Features
 
 - Type safety via TypeScript
-- Async/await built into controller logic
-- Linting and code styling built-in
-- Helmet configuration for security
-- Postgres database connectivity
+- Async/await
+- Linting and code styling
+- Helmet security configuration
+- Postgres connectivity
 - Redis data caching
+- OpenTelemetry (coming soon!)
 
 ## Getting Started
 

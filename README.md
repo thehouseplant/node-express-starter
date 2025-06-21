@@ -1,6 +1,6 @@
 # Node Express Starter
 
-A small sample project to get started with a modern Node.js Express API.
+A sample project to get started with a modern Node.js Express API.
 
 ## Requirements
 

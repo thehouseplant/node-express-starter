@@ -2,6 +2,7 @@ import express from 'express';
 import helmet from 'helmet';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
+import cors from 'cors';
 import employeeRoutes from './routes/employeeRoutes';
 import requestLogger from './middlewares/requestLogger';
 import errorHandler from './middlewares/errorHandler';
@@ -18,6 +19,22 @@ const apiLimiter = rateLimit({
   legacyHeaders: false, // Disable `X-RateLimit-*` headers
 });
 
+// Configure CORS
+const corsOptions = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    // Allow requests with no origin (`curl` requests)
+    if (!origin) return callback(null, true);
+    if (config.cors.allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-request-id'], // Allowed headers
+  credentials: true, // Allow cookies to be sent with requests
+};
+
 // Initialize helmet
 app.use(helmet());
 
@@ -29,6 +46,9 @@ app.use(compression());
 
 // Enable rate limiting for all requests
 app.use(apiLimiter);
+
+// Enable CORS middleware
+app.use(cors(corsOptions));
 
 // Add request logging middleware
 app.use(requestLogger);

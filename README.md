@@ -17,7 +17,7 @@ A small sample project to get started with a modern Node.js Express API.
 - Default ecurity configuration (`helmet`)
 - PostgreSQL support (`pg`)
 - Data caching (Redis and `ioredis`)
-- Process management (`pmw`)
+- Process management (`pm2`)
 - Structured logging (`winston`)
 - OpenTelemetry (coming soon!)
 

@@ -19,6 +19,7 @@ A sample project to get started with a modern Node.js Express API.
 - Data caching (Redis and `ioredis`)
 - Process management (`pm2`)
 - Structured logging (`winston`)
+- Rate limiting (`express-rate-limit`)
 - Request tracing (OpenTelemetry) (coming soon!)
 
 ## Getting Started

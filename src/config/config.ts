@@ -22,6 +22,9 @@ interface Config {
     max: number;
     message: string;
   };
+  cors: {
+    allowedOrigins: string[];
+  };
 }
 
 const config: Config = {
@@ -43,6 +46,9 @@ const config: Config = {
     windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
     max: Number(process.env.RATE_LIMIT_MAX) || 100, // Limit IP address to 100 requests
     message: process.env.RATE_LIMIT_MESSAGE || 'Too many requests from this IP address, please try again later',
+  },
+  cors: {
+    allowedOrigins: process.env.CORS_ALLOWED_ORIGINS ? process.env.CORS_ALLOWED_ORIGINS.split(',') : ['http://localhost:3000'],
   },
 };
 

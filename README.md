@@ -6,6 +6,7 @@ A small sample project to get started with a modern Node.js Express API.
 
 - [Node.js](https://nodejs.org/en)
 - [PostgreSQL](https://www.postgresql.org/)
+- [Redis](https://redis.io/)
 - [Docker](https://www.docker.com/)
 
 ## Getting Started

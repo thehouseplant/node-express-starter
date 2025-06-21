@@ -37,7 +37,8 @@ export const createEmployee = async (req: Request, res: Response, next: NextFunc
     logger.info('Employee created successfully', { employeeId: newEmployee.id, requestId });
     res.status(201).json(newEmployee);
   } catch (error) {
-    logger.error('Error creating employee', { error: error.message, requestId, body: req.body });
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error has occurred';
+    logger.error('Error creating employee', { error: errorMessage, requestId, body: req.body });
     next(error);
   }
 };
@@ -73,7 +74,8 @@ export const getEmployees = async (req: Request, res: Response, next: NextFuncti
     logger.info('Fetched all employees from database and added to cache', { count: employees.length, requestId });
     res.json(result.rows);
   } catch (error) {
-    logger.error('Error getting all employees', { error: error.message, requestId });
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error has occurred';
+    logger.error('Error getting all employees', { error: errorMessage, requestId });
     next(error);
   }
 };
@@ -117,7 +119,8 @@ export const getEmployeeById = async (req: Request, res: Response, next: NextFun
     logger.info('Fetched single employee from database and added to cache', { employeeId: id, requestId });
     res.json(employee);
   } catch (error) {
-    logger.error('Error getting employee by ID', { error: error.message, employeeId: req.params.id, requestId });
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error has occurred';
+    logger.error('Error getting employee by ID', { error: errorMessage, employeeId: req.params.id, requestId });
     next(error);
   }
 };
@@ -153,7 +156,8 @@ export const updateEmployee = async (req: Request, res: Response, next: NextFunc
     logger.info('Employee updated successfully', { employeeId: id, requestId });
     res.json(updateEmployee);
   } catch (error) {
-    logger.error('Error updating employee', { error: error.message, employeeId: req.params.id, requestId, body: req.body });
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error has occurred';
+    logger.error('Error updating employee', { error: errorMessage, employeeId: req.params.id, requestId, body: req.body });
     next(error);
   }
 };
@@ -188,7 +192,8 @@ export const deleteEmployee = async (req: Request, res: Response, next: NextFunc
     logger.info('Employee deleted successfully', { employeeId: id, requestId });
     res.json(deletedEmployee);
   } catch (error) {
-    logger.error('Error deleting employee', { error: error.message, employeeId: req.params.id, requestId });
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error has occurred';
+    logger.error('Error deleting employee', { error: errorMessage, employeeId: req.params.id, requestId });
     next(error);
   }
 };

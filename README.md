@@ -24,6 +24,7 @@ A sample project to get started with a modern Node.js Express API.
 - [PostgreSQL](https://www.postgresql.org/)
 - [Redis](https://redis.io/)
 - [Docker](https://www.docker.com/)
+- [k6](https://k6.io/)
 
 ## Getting Started
 

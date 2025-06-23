@@ -16,6 +16,7 @@ A sample project to get started with a modern Node.js Express API.
 - [x] CORS support (`cors`)
 - [ ] Request tracing (OpenTelemetry)
 - [ ] Unit testing coverage
+- [x] Load testing coverage (`k6`)
 
 ## Requirements
 
